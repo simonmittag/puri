@@ -11,7 +11,7 @@
 [![Version](https://img.shields.io/badge/version-0.1-orange)](https://github.com/simonmittag/puri/releases/tag/v0.1)
 
 ## What's New
-### v0.1
+### v0.1.2
 * initial revision
 
 ## Up and running
@@ -31,7 +31,7 @@ puri
 
 ## Usage
 ```
-λ puri[v0.1]
+λ puri[v0.1.2]
 Usage: puri [-h]|[-v]|[-p name] scheme://host:port?k=v
   -h    print usage instructions
   -p string

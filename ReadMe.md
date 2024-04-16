@@ -31,7 +31,7 @@ puri
 
 ## Usage
 ```
-λ puri[v0.1.2]
+λ puri[v0.1.4]
 Usage: puri [-h]|[-v]|[-p name] scheme://host:port?k=v
   -h    print usage instructions
   -p string

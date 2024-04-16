@@ -27,7 +27,7 @@ func TestExtractParam(t *testing.T) {
 			name:  "case 3: invalid url, valid param",
 			uri:   "http:/example.com?param1=value1",
 			param: "param1",
-			want:  "",
+			want:  "value1",
 		},
 		{
 			name:  "case 4: empty url and param",
@@ -40,9 +40,15 @@ func TestExtractParam(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := ExtractParam(tt.uri, tt.param)
-			if got != tt.want {
-				t.Errorf("ExtractParam() = %v, want %v", got, tt.want)
+			got, err := ExtractParam(tt.uri, tt.param)
+			if err == nil {
+				if got != tt.want {
+					t.Errorf("ExtractParam() = %v, want %v", got, tt.want)
+				}
+			} else {
+				if tt.want != "" {
+					t.Errorf("wanted a result: %s, but got error: %v", tt.want, err)
+				}
 			}
 		})
 	}

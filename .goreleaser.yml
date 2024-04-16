@@ -1,0 +1,31 @@
+builds:
+  - binary: puri
+    main: cmd/puri/main.go
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+
+release:
+  prerelease: auto
+
+universal_binaries:
+  - replace: true
+
+brews:
+  -
+    name: puri
+    homepage: "https://github.com/simonmittag/puri"
+    tap:
+      owner: simonmittag
+      name: homebrew-cli
+    commit_author:
+      name: simonmittag
+      email: simonmittag@gmail.com
+
+checksum:
+  name_template: 'checksums.txt'

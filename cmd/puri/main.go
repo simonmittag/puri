@@ -46,7 +46,12 @@ func main() {
 
 	switch mode {
 	case Param:
-		fmt.Println(puri.ExtractParam(uri, *p))
+		res, err := puri.ExtractParam(uri, *p)
+		if err == nil {
+			fmt.Println(res)
+		} else {
+			printUsage()
+		}
 	case Usage:
 
 		printUsage()

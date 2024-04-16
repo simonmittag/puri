@@ -2,7 +2,7 @@ package puri
 
 import "net/url"
 
-const Version string = "v0.1.2"
+const Version string = "v0.1.3"
 
 func ExtractParam(uri string, param string) (string, error) {
 	parsed, err := url.Parse(uri)

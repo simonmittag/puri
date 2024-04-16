@@ -34,3 +34,11 @@ func TestParseArgs(t *testing.T) {
 		t.Error("should fail")
 	}
 }
+
+func TestPrintUsage(t *testing.T) {
+	printUsage()
+}
+
+func TestPrintVersion(t *testing.T) {
+	printVersion()
+}

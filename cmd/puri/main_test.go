@@ -2,8 +2,27 @@ package main
 
 import (
 	"flag"
+	"os"
 	"testing"
 )
+
+func TestMainFuncWithHelp(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-h"}
+	main()
+}
+
+func TestMainFuncWithVersion(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-v"}
+	main()
+}
+
+func TestMainFuncWithPayload(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-p", "k", "https://www.google.com?k=v"}
+	main()
+}
 
 func TestParseFlags(t *testing.T) {
 	err := ParseFlags()

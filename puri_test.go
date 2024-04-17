@@ -53,3 +53,31 @@ func TestExtractParam(t *testing.T) {
 		})
 	}
 }
+
+func TestExtractScheme(t *testing.T) {
+	samples := []struct {
+		uri        string
+		name       string
+		wantScheme string
+		hasError   bool
+	}{
+		{"ftp://example.com", "ftp scheme", "ftp", false},
+		{"http://example.com", "http scheme", "http", false},
+		{"https://example.com", "https scheme", "https", false},
+		{"", "empty uri", "", true},
+		{"bad_string", "invalid uri", "", true},
+	}
+
+	for _, sample := range samples {
+		t.Run(sample.name, func(t *testing.T) {
+			gotScheme, err := ExtractScheme(sample.uri)
+			if (err != nil) != sample.hasError {
+				t.Errorf("ExtractScheme() error = %v, hasError %v", err, sample.hasError)
+				return
+			}
+			if gotScheme != sample.wantScheme {
+				t.Errorf("ExtractScheme() = %v, want %v", gotScheme, sample.wantScheme)
+			}
+		})
+	}
+}

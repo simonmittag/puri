@@ -26,3 +26,14 @@ func ExtractScheme(uri string) (string, error) {
 	}
 	return parsed.Scheme, nil
 }
+
+func ExtractHost(uri string) (string, error) {
+	parsed, err := url.Parse(uri)
+	if err != nil || len(uri) == 0 {
+		return "", errors.New("invalid uri")
+	}
+	if parsed != nil && len(parsed.Host) == 0 {
+		return "", errors.New("no host")
+	}
+	return parsed.Host, nil
+}

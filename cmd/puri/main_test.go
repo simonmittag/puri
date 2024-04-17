@@ -30,6 +30,12 @@ func TestMainFuncWithPayloadandScheme(t *testing.T) {
 	main()
 }
 
+func TestMainFuncWithPayloadandHost(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-o", "https://www.google.com?k=v"}
+	main()
+}
+
 func TestParseFlags(t *testing.T) {
 	err := ParseFlags()
 	if err != nil {

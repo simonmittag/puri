@@ -3,6 +3,7 @@ package puri
 import (
 	"errors"
 	"net/url"
+	"strings"
 )
 
 const Version string = "v0.1.4"
@@ -33,7 +34,11 @@ func ExtractHost(uri string) (string, error) {
 		return "", errors.New("invalid uri")
 	}
 	if parsed != nil && len(parsed.Host) == 0 {
+		if len(parsed.Path) > 0 {
+			return parsed.Path, nil
+		}
 		return "", errors.New("no host")
 	}
-	return parsed.Host, nil
+	hp := strings.Split(parsed.Host, ":")
+	return hp[0], nil
 }

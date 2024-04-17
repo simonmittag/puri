@@ -56,16 +56,16 @@ func TestExtractParam(t *testing.T) {
 
 func TestExtractScheme(t *testing.T) {
 	samples := []struct {
-		uri        string
 		name       string
+		uri        string
 		wantScheme string
 		hasError   bool
 	}{
-		{"ftp://example.com", "ftp scheme", "ftp", false},
-		{"http://example.com", "http scheme", "http", false},
-		{"https://example.com", "https scheme", "https", false},
-		{"", "empty uri", "", true},
-		{"bad_string", "invalid uri", "", true},
+		{"ftp", "ftp://example.com", "ftp", false},
+		{"http", "http://example.com", "http", false},
+		{"https", "https://example.com", "https", false},
+		{"none", "empty uri", "", true},
+		{"bad", "invalid uri", "", true},
 	}
 
 	for _, sample := range samples {
@@ -77,6 +77,34 @@ func TestExtractScheme(t *testing.T) {
 			}
 			if gotScheme != sample.wantScheme {
 				t.Errorf("ExtractScheme() = %v, want %v", gotScheme, sample.wantScheme)
+			}
+		})
+	}
+}
+
+func TestExtractHost(t *testing.T) {
+	samples := []struct {
+		name     string
+		uri      string
+		wantHost string
+		hasError bool
+	}{
+		{"ftp host", "ftp://example.com", "example.com", false},
+		{"http host with port", "http://example.com:8080", "example.com", false},
+		{"http host with port and path", "http://example.com:8080/blah/blah?k=v", "example.com", false},
+		{"simple", "example.com", "example.com", false},
+		{"simpler", "host", "host", false},
+	}
+
+	for _, sample := range samples {
+		t.Run(sample.name, func(t *testing.T) {
+			gotHost, err := ExtractHost(sample.uri)
+			if (err != nil) != sample.hasError {
+				t.Errorf("ExtractHost() error = %v, hasError %v", err, sample.hasError)
+				return
+			}
+			if gotHost != sample.wantHost {
+				t.Errorf("ExtractScheme() = %v, want %v", gotHost, sample.wantHost)
 			}
 		})
 	}

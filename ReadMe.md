@@ -8,10 +8,10 @@
 [![CodeClimate Test Coverage](https://api.codeclimate.com/v1/badges/70cd59e4dfd2801f8661/test_coverage)](https://codeclimate.com/github/simonmittag/puri/test_coverage)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/simonmittag/puri)](https://img.shields.io/github/go-mod/go-version/simonmittag/puri)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Version](https://img.shields.io/badge/version-0.1.4-orange)](https://github.com/simonmittag/puri/releases/tag/v0.1.4)
+[![Version](https://img.shields.io/badge/version-0.1.5-orange)](https://github.com/simonmittag/puri/releases/tag/v0.1.5)
 
 ## What's New
-### v0.1.4
+### v0.1.5
 * initial revision
 
 ## Up and running
@@ -31,7 +31,7 @@ puri
 
 ## Usage
 ```
-λ puri[v0.1.4]
+λ puri[v0.1.5]
 Usage: puri [-h]|[-v]|[-p name] scheme://host:port?k=v
   -h    print usage instructions
   -p string

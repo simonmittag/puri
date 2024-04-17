@@ -18,9 +18,15 @@ func TestMainFuncWithVersion(t *testing.T) {
 	main()
 }
 
-func TestMainFuncWithPayload(t *testing.T) {
+func TestMainFuncWithPayloadandUriParam(t *testing.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	os.Args = []string{os.Args[0], "-p", "k", "https://www.google.com?k=v"}
+	main()
+}
+
+func TestMainFuncWithPayloadandScheme(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-s", "https://www.google.com?k=v"}
 	main()
 }
 

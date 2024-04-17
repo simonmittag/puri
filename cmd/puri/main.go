@@ -27,6 +27,7 @@ func main() {
 	uri := ""
 
 	p := flag.String("p", "", "extract uri param")
+	s := flag.Bool("s", false, "extract scheme")
 	v := flag.Bool("v", false, "print puri version")
 	h := flag.Bool("h", false, "print usage instructions")
 	flag.Usage = printUsage
@@ -41,23 +42,31 @@ func main() {
 			mode = Version
 		} else if *p != "" {
 			mode = Param
+		} else if *s {
+			mode = Scheme
 		}
 	}
 
 	switch mode {
 	case Param:
-		res, err := puri.ExtractParam(uri, *p)
-		if err == nil {
-			fmt.Println(res)
-		} else {
-			printUsage()
-		}
+		handleOutput(puri.ExtractParam(uri, *p))
+	case Scheme:
+
+		handleOutput(puri.ExtractScheme(uri))
 	case Usage:
 
 		printUsage()
 	case Version:
 
 		printVersion()
+	}
+}
+
+func handleOutput(res string, err error) {
+	if err == nil {
+		fmt.Println(res)
+	} else {
+		printUsage()
 	}
 }
 

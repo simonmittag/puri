@@ -12,3 +12,11 @@ func ExtractParam(uri string, param string) (string, error) {
 	v := parsed.Query()
 	return v.Get(param), nil
 }
+
+func ExtractScheme(uri string) (string, error) {
+	parsed, err := url.Parse(uri)
+	if err != nil || len(uri) == 0 {
+		return "", err
+	}
+	return parsed.Scheme, nil
+}

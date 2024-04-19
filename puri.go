@@ -8,78 +8,78 @@ import (
 
 const Version string = "v0.1.5"
 
-func parseURL(uri string) (*url.URL, error) {
-	parsed, err := url.Parse(uri)
-	if err != nil || len(uri) == 0 {
-		return nil, errors.New("invalid uri")
-	}
-	return parsed, nil
-}
+const colon = ":"
+const schemeSeparator = "://"
 
-func ExtractParam(uri string, param string) (*string, error) {
-	parsed, err := parseURL(uri)
-	if err != nil {
-		return nil, err
-	}
-	v := parsed.Query()
+// ExtractParam returns a pointer to a string containing the value of the specified parameter. Note,
+// returns empty strings if value not found so can be used for optional params
+func ExtractParam(uri url.URL, param string) (*string, error) {
+	v := uri.Query()
 	r := v.Get(param)
 	return &r, nil
 }
 
-func ExtractScheme(uri string) (*string, error) {
-	parsed, err := parseURL(uri)
-	if err != nil {
-		return nil, err
+// ExtractScheme extracts the scheme from a given URL.
+func ExtractScheme(uri url.URL) (*string, error) {
+	if len(uri.Scheme) == 0 {
+		return NoScheme()
 	}
 
-	if parsed != nil && len(parsed.Scheme) == 0 {
-		return nil, errors.New("no scheme")
-	}
-
-	return &parsed.Scheme, nil
+	return &uri.Scheme, nil
 }
 
-func ExtractHost(uri string) (*string, error) {
-	parsed, err := parseURL(uri)
-	if err != nil {
-		return nil, err
-	}
-
-	if parsed != nil && len(parsed.Host) == 0 {
-		if len(parsed.Path) > 0 {
-			return &parsed.Path, nil
+// ExtractHost extracts the host from the given URL. If the host is in the format "host:port", it splits the host
+// and returns only the host part.
+func ExtractHost(uri url.URL) (*string, error) {
+	if len(uri.Host) == 0 {
+		if len(uri.Path) > 0 {
+			return &uri.Path, nil
 		}
-		return nil, errors.New("no host")
+		return NoHost()
 	}
 
-	hp := strings.Split(parsed.Host, ":")
+	hp := strings.Split(uri.Host, colon)
 	return &hp[0], nil
 }
 
-func ExtractPort(uri string) (*string, error) {
-	parsed, err := parseURL(uri)
-	if err != nil {
-		return nil, err
-	}
-
-	if parsed != nil && len(parsed.Host) == 0 {
-		if len(parsed.Path) > 0 {
-			parsed.Host = parsed.Path
+// ExtractPort extracts the port from a given URL if present, otherwise returns an error.
+func ExtractPort(uri url.URL) (*string, error) {
+	if len(uri.Host) == 0 {
+		if len(uri.Path) > 0 {
+			uri.Host = uri.Path
 		}
-		if len(parsed.Scheme) > 0 {
-			parsed.Host = parsed.Scheme
+		if len(uri.Scheme) > 0 {
+			uri.Host = uri.Scheme
 		}
 	}
 
-	hp := strings.Split(parsed.Host, ":")
+	hp := strings.Split(uri.Host, colon)
 	if len(hp) != 2 {
-		if !strings.Contains(uri, "://") {
-			hp = strings.Split(uri, ":")
+		if !strings.Contains(uri.String(), schemeSeparator) {
+			hp = strings.Split(uri.String(), colon)
 		}
 		if len(hp) != 2 {
-			return nil, errors.New("no port")
+			return NoPort()
 		}
 	}
 
 	return &hp[1], nil
+}
+
+// NoPort returns an error indicating that there is no port associated with the URL. It is used
+// in the ExtractPort function to handle cases where the port cannot be extracted from the URL.
+func NoPort() (*string, error) {
+	p := ""
+	return &p, nil
+}
+
+// NoScheme returns an error indicating that no scheme was provided.
+// It returns a nil string pointer and an error with the message "no scheme".
+func NoScheme() (*string, error) {
+	return nil, errors.New("no scheme")
+}
+
+// NoHost returns an error indicating that there is no host available.
+func NoHost() (*string, error) {
+	return nil, errors.New("no host")
 }

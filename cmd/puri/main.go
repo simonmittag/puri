@@ -55,13 +55,13 @@ func main() {
 
 	switch mode {
 	case Param:
-		handleOutput(puri.ExtractParam(uri, *p))
+		handleOutput(puri.ExtractParam(handleInput(uri), *p))
 	case Scheme:
-		handleOutput(puri.ExtractScheme(uri))
+		handleOutput(puri.ExtractScheme(handleInput(uri)))
 	case Port:
-		handleOutput(puri.ExtractPort(uri))
+		handleOutput(puri.ExtractPort(handleInput(uri)))
 	case Host:
-		handleOutput(puri.ExtractHost(uri))
+		handleOutput(puri.ExtractHost(handleInput(uri)))
 	case Usage:
 
 		printUsage()
@@ -69,6 +69,14 @@ func main() {
 
 		printVersion()
 	}
+}
+
+func handleInput(uri string) url.URL {
+	parsed, err := url.Parse(uri)
+	if err != nil || len(uri) == 0 {
+		panic(fmt.Errorf("invalid uri: %v", uri))
+	}
+	return *parsed
 }
 
 func handleOutput(res *string, err error) {

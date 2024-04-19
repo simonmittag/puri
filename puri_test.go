@@ -1,6 +1,7 @@
 package puri
 
 import (
+	"net/url"
 	"testing"
 )
 
@@ -8,33 +9,41 @@ func p[T any](t T) *T {
 	return &t
 }
 
+func toTestURL(uri string) url.URL {
+	u, e := url.Parse(uri)
+	if e != nil {
+		panic("test setup failure")
+	}
+	return *u
+}
+
 func TestExtractParam(t *testing.T) {
 	tests := []struct {
 		name  string
-		uri   string
+		uri   url.URL
 		param string
 		want  *string
 	}{
 		{
 			name:  "case 1: valid url and param",
-			uri:   "http://example.com/?key=value",
+			uri:   toTestURL("http://example.com/?key=value"),
 			param: "key",
 			want:  p("value"),
 		},
 		{
 			name:  "case 2: valid url, param is missing",
-			uri:   "http://example.com/?key=value",
+			uri:   toTestURL("http://example.com/?key=value"),
 			param: "missing",
 		},
 		{
 			name:  "case 3: invalid url, valid param",
-			uri:   "http:/example.com?param1=value1",
+			uri:   toTestURL("http:/example.com?param1=value1"),
 			param: "param1",
 			want:  p("value1"),
 		},
 		{
 			name:  "case 4: empty url and param",
-			uri:   "",
+			uri:   toTestURL(""),
 			param: "",
 		},
 		// Add more cases as needed.
@@ -59,15 +68,15 @@ func TestExtractParam(t *testing.T) {
 func TestExtractScheme(t *testing.T) {
 	tests := []struct {
 		name       string
-		uri        string
+		uri        url.URL
 		wantScheme *string
 		wantError  bool
 	}{
-		{"ftp", "ftp://example.com", p("ftp"), false},
-		{"http", "http://example.com", p("http"), false},
-		{"https", "https://example.com", p("https"), false},
-		{"none", "empty uri", nil, true},
-		{"bad", "invalid uri", nil, true},
+		{"ftp", toTestURL("ftp://example.com"), p("ftp"), false},
+		{"http", toTestURL("http://example.com"), p("http"), false},
+		{"https", toTestURL("https://example.com"), p("https"), false},
+		{"none", toTestURL("empty uri"), nil, true},
+		{"bad", toTestURL("invalid uri"), nil, true},
 	}
 
 	for _, tc := range tests {
@@ -88,15 +97,15 @@ func TestExtractScheme(t *testing.T) {
 func TestExtractHost(t *testing.T) {
 	tests := []struct {
 		name      string
-		uri       string
+		uri       url.URL
 		wantHost  *string
 		wantError bool
 	}{
-		{"ftp host", "ftp://example.com", p("example.com"), false},
-		{"http host with port", "http://example.com:8080", p("example.com"), false},
-		{"http host with port and path", "http://example.com:8080/blah/blah?k=v", p("example.com"), false},
-		{"simple", "example.com", p("example.com"), false},
-		{"simpler", "host", p("host"), false},
+		{"ftp host", toTestURL("ftp://example.com"), p("example.com"), false},
+		{"http host with port", toTestURL("http://example.com:8080"), p("example.com"), false},
+		{"http host with port and path", toTestURL("http://example.com:8080/blah/blah?k=v"), p("example.com"), false},
+		{"simple", toTestURL("example.com"), p("example.com"), false},
+		{"simpler", toTestURL("host"), p("host"), false},
 	}
 
 	for _, tc := range tests {
@@ -116,15 +125,15 @@ func TestExtractHost(t *testing.T) {
 func TestExtractPort(t *testing.T) {
 	tests := []struct {
 		name      string
-		uri       string
+		uri       url.URL
 		wantPort  *string
 		wantError bool
 	}{
-		{"ftp host no port", "ftp://example.com", nil, true},
-		{"http host with port", "http://example.com:8080", p("8080"), false},
-		{"http host with port and path", "http://example.com:8080/blah/blah?k=v", p("8080"), false},
-		{"simple", "example.com:80", p("80"), false},
-		{"simpler", "host", nil, true},
+		{"ftp host no port", toTestURL("ftp://example.com"), p(""), false},
+		{"http host with port", toTestURL("http://example.com:8080"), p("8080"), false},
+		{"http host with port and path", toTestURL("http://example.com:8080/blah/blah?k=v"), p("8080"), false},
+		{"simple", toTestURL("example.com:80"), p("80"), false},
+		{"simpler", toTestURL("host"), p(""), false},
 	}
 
 	for _, tc := range tests {

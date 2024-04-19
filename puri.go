@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const Version string = "v0.1.5"
+const Version string = "v0.1.6"
 
 const colon = ":"
 const schemeSeparator = "://"

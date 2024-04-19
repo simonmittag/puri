@@ -39,17 +39,20 @@ func main() {
 	} else {
 		a := flag.Args()
 		uri, err = parseArgs(a)
-
-		if *v {
-			mode = Version
-		} else if *p != "" {
-			mode = Param
-		} else if *s {
-			mode = Scheme
-		} else if *o {
-			mode = Host
-		} else if *r {
-			mode = Port
+		if err != nil {
+			mode = Usage
+		} else {
+			if *v {
+				mode = Version
+			} else if *p != "" {
+				mode = Param
+			} else if *s {
+				mode = Scheme
+			} else if *o {
+				mode = Host
+			} else if *r {
+				mode = Port
+			}
 		}
 	}
 

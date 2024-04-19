@@ -28,6 +28,7 @@ func main() {
 
 	p := flag.String("p", "", "extract uri param")
 	o := flag.Bool("o", false, "extract host")
+	r := flag.Bool("r", false, "extract port")
 	s := flag.Bool("s", false, "extract scheme")
 	v := flag.Bool("v", false, "print puri version")
 	h := flag.Bool("h", false, "print usage instructions")
@@ -47,6 +48,8 @@ func main() {
 			mode = Scheme
 		} else if *o {
 			mode = Host
+		} else if *r {
+			mode = Port
 		}
 	}
 
@@ -54,8 +57,9 @@ func main() {
 	case Param:
 		handleOutput(puri.ExtractParam(uri, *p))
 	case Scheme:
-
 		handleOutput(puri.ExtractScheme(uri))
+	case Port:
+		handleOutput(puri.ExtractPort(uri))
 	case Host:
 		handleOutput(puri.ExtractHost(uri))
 	case Usage:

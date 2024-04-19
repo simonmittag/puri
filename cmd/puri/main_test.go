@@ -36,6 +36,12 @@ func TestMainFuncWithPayloadandHost(t *testing.T) {
 	main()
 }
 
+func TestMainFuncWithPayloadandPort(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-r", "https://www.google.com:8080?k=v"}
+	main()
+}
+
 func TestParseFlags(t *testing.T) {
 	err := ParseFlags()
 	if err != nil {

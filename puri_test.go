@@ -59,7 +59,7 @@ func TestExtractScheme(t *testing.T) {
 		name       string
 		uri        string
 		wantScheme string
-		hasError   bool
+		wantError  bool
 	}{
 		{"ftp", "ftp://example.com", "ftp", false},
 		{"http", "http://example.com", "http", false},
@@ -71,8 +71,8 @@ func TestExtractScheme(t *testing.T) {
 	for _, sample := range samples {
 		t.Run(sample.name, func(t *testing.T) {
 			gotScheme, err := ExtractScheme(sample.uri)
-			if (err != nil) != sample.hasError {
-				t.Errorf("ExtractScheme() error = %v, hasError %v", err, sample.hasError)
+			if (err != nil) != sample.wantError {
+				t.Errorf("ExtractScheme() error = %v, hasError %v", err, sample.wantError)
 				return
 			}
 			if gotScheme != sample.wantScheme {
@@ -84,10 +84,10 @@ func TestExtractScheme(t *testing.T) {
 
 func TestExtractHost(t *testing.T) {
 	samples := []struct {
-		name     string
-		uri      string
-		wantHost string
-		hasError bool
+		name      string
+		uri       string
+		wantHost  string
+		wantError bool
 	}{
 		{"ftp host", "ftp://example.com", "example.com", false},
 		{"http host with port", "http://example.com:8080", "example.com", false},
@@ -99,12 +99,40 @@ func TestExtractHost(t *testing.T) {
 	for _, sample := range samples {
 		t.Run(sample.name, func(t *testing.T) {
 			gotHost, err := ExtractHost(sample.uri)
-			if (err != nil) != sample.hasError {
-				t.Errorf("ExtractHost() error = %v, hasError %v", err, sample.hasError)
+			if (err != nil) != sample.wantError {
+				t.Errorf("ExtractHost() error = %v, hasError %v", err, sample.wantError)
 				return
 			}
 			if gotHost != sample.wantHost {
 				t.Errorf("ExtractScheme() = %v, want %v", gotHost, sample.wantHost)
+			}
+		})
+	}
+}
+
+func TestExtractPort(t *testing.T) {
+	tests := []struct {
+		name      string
+		uri       string
+		wantPort  string
+		wantError bool
+	}{
+		{"ftp host no port", "ftp://example.com", "", true},
+		{"http host with port", "http://example.com:8080", "8080", false},
+		{"http host with port and path", "http://example.com:8080/blah/blah?k=v", "8080", false},
+		{"simple", "example.com:80", "80", false},
+		{"simpler", "host", "", true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			gotPort, err := ExtractPort(tc.uri)
+			if (err != nil) != tc.wantError {
+				t.Errorf("ExtractPort() error = %v, hasError %v", err, tc.wantError)
+				return
+			}
+			if gotPort != tc.wantPort {
+				t.Errorf("ExtractPort() = %v, want %v", gotPort, tc.wantPort)
 			}
 		})
 	}

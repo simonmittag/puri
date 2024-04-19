@@ -46,7 +46,6 @@ func TestExtractParam(t *testing.T) {
 			uri:   toTestURL(""),
 			param: "",
 		},
-		// Add more cases as needed.
 	}
 
 	for _, tt := range tests {

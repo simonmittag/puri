@@ -71,9 +71,9 @@ func main() {
 	}
 }
 
-func handleOutput(res string, err error) {
+func handleOutput(res *string, err error) {
 	if err == nil {
-		fmt.Println(res)
+		fmt.Println(*res)
 	} else {
 		printUsage()
 	}

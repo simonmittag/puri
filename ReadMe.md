@@ -1,3 +1,5 @@
+![](logo.png)
+
 `puri` ("parse uri") is a commandline utility that reads and extracts uri components,
 
 [![Circleci Builds](https://circleci.com/gh/simonmittag/puri.svg?style=shield)](https://circleci.com/gh/simonmittag/puri)

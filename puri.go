@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const Version string = "v0.1.8"
+const Version string = "v0.1.9"
 
 const colon = ":"
 const slash = "/"

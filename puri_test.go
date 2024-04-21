@@ -162,6 +162,8 @@ func TestExtractPath(t *testing.T) {
 		{"Path with https and anchor", toTestURL("https://www.google.com/path/path#a"), p("/path/path#a"), false},
 		{"Path with http, port and query", toTestURL("http://example.com:8080/path/blah?k=v"), p("/path/blah"), false},
 		{"Path with http, port and query and anchor", toTestURL("http://example.com:8080/path/blah#a?k=v"), p("/path/blah#a"), false},
+		{"Weird Path with http, no port and query and anchor", toTestURL("https://www.google.com/www.blah.com/?q=www.google.com2"), p("/www.blah.com/"), false},
+		{"Weird Path with http, port and query and anchor", toTestURL("https://www.google.com:5432/www.blah.com/?q=www.google.com2"), p("/www.blah.com/"), false},
 		{"Path with tld host", toTestURL("example.com/path"), p("/path"), false},
 		{"Path with host and query", toTestURL("example.com/path?k=v"), p("/path"), false},
 		{"Path with host and anchor and query", toTestURL("example.com/path#x?k=v"), p("/path#x"), false},

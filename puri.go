@@ -43,10 +43,8 @@ func ExtractHost(uri url.URL) (*string, error) {
 }
 
 func ExtractPath(uri url.URL) (*string, error) {
-	p := uri.Path
-	if len(p) == 0 || strings.Contains(uri.String(), "#") {
-		p = uri.String()
-	}
+	p := uri.String()
+
 	if strings.Contains(p, colon) {
 		p = p[strings.Index(p, schemeSeparator)+3:]
 		if strings.Contains(p, colon) {
@@ -54,6 +52,7 @@ func ExtractPath(uri url.URL) (*string, error) {
 		}
 		p = p[strings.Index(p, "/"):]
 		p = trimQuery(p)
+		return &p, nil
 	}
 
 	tld, err := IANA.hasTLDInString(p)

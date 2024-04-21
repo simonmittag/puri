@@ -47,8 +47,8 @@ func ExtractPath(uri url.URL) (*string, error) {
 	if len(p) == 0 || strings.Contains(uri.String(), "#") {
 		p = uri.String()
 	}
-	if strings.Contains(p, colon) && !strings.Contains(p, schemeSeparator) {
-		c := p[strings.Index(p, colon):]
+	if strings.Contains(p, colon) {
+		c := p[strings.LastIndex(p, colon):]
 		p = c[strings.Index(c, "/"):]
 		p = trimQuery(p)
 	}

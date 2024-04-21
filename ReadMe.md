@@ -37,7 +37,8 @@ puri
 
 ## Usage
 ```
-λ puri[v0.1.8]
+~ λ puri
+puri[v0.1.8]
 Usage: puri [-s]|[-o]|[-r]|[-p]|[-q name]|[-h]|[-v] scheme://host:port#a?k=v
   -h	print usage instructions
   -o	extract host

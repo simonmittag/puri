@@ -41,7 +41,7 @@ func (t TLDS) hasTLDInString(uri string) (*string, error) {
 	uri = strings.ToUpper(uri)
 	for _, tld := range t {
 		d := DOT + tld
-		if strings.Contains(uri, d) || strings.Contains(uri, d) {
+		if strings.Contains(uri, d) {
 			return &d, nil
 		}
 	}

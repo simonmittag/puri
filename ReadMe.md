@@ -10,11 +10,11 @@
 [![CodeClimate Test Coverage](https://api.codeclimate.com/v1/badges/1f3771faf0b714cab0de/test_coverage)](https://codeclimate.com/github/simonmittag/puri/test_coverage)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/simonmittag/puri)](https://img.shields.io/github/go-mod/go-version/simonmittag/puri)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Version](https://img.shields.io/badge/version-0.1.6-orange)](https://github.com/simonmittag/puri/releases/tag/v0.1.6)
+[![Version](https://img.shields.io/badge/version-0.1.7-orange)](https://github.com/simonmittag/puri/releases/tag/v0.1.7)
 
 ## What's New
-### v0.1.6
-* initial revision
+### v0.1.7
+* added simple path parsing that makes this more intuitive over standard library interpretation
 
 ## Up and running
 ### Homebrew

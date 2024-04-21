@@ -60,15 +60,19 @@ func main() {
 		}
 	}
 
+	handle := func(f func(u url.URL) (*string, error), uri string) {
+		handleOutput(f(handleInput(uri)))
+	}
+
 	switch mode {
 	case Scheme:
-		handleOutput(puri.ExtractScheme(handleInput(uri)))
+		handle(puri.ExtractScheme, uri)
 	case Host:
-		handleOutput(puri.ExtractHost(handleInput(uri)))
+		handle(puri.ExtractHost, uri)
 	case Port:
-		handleOutput(puri.ExtractPort(handleInput(uri)))
+		handle(puri.ExtractPort, uri)
 	case Path:
-		handleOutput(puri.ExtractPath(handleInput(uri)))
+		handle(puri.ExtractPath, uri)
 	case Query:
 		handleOutput(puri.ExtractQuery(handleInput(uri), *q))
 	case Usage:
@@ -97,7 +101,7 @@ func handleOutput(res *string, err error) {
 
 func printUsage() {
 	printVersion()
-	fmt.Printf("Usage: puri [-h]|[-v][-p name]| scheme://host:port?k=v\n")
+	fmt.Printf("Usage: puri [-s]|[-o]|[-r]|[-p]|[-q name]|[-h]|[-v] scheme://host:port#a?k=v\n")
 	flag.PrintDefaults()
 }
 

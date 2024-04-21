@@ -156,6 +156,11 @@ func TestExtractPath(t *testing.T) {
 		wantPath  *string
 		wantError bool
 	}{
+		{"No Path", toTestURL(""), p(""), false},
+		{"No Path with port and params", toTestURL("ftp://example.com:8080?k=v"), p(""), false},
+		{"No Path but anchor with port and params", toTestURL("ftp://example.com:8080#?k=v"), p("#"), false},
+		{"No Path with port", toTestURL("ftp://example.com:8080"), p(""), false},
+		{"No Path with host", toTestURL("ftp://example.com"), p(""), false},
 		{"Path with ftp", toTestURL("ftp://example.com/path"), p("/path"), false},
 		{"Path with http and port", toTestURL("http://example.com:8080/path"), p("/path"), false},
 		{"Path with http and anchor", toTestURL("http://example.com/path#a"), p("/path#a"), false},

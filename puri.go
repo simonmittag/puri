@@ -9,6 +9,8 @@ import (
 const Version string = "v0.1.8"
 
 const colon = ":"
+const slash = "/"
+const anchor = "#"
 const schemeSeparator = "://"
 
 // ExtractQuery returns a pointer to a string containing the value of the specified parameter. Note,
@@ -46,11 +48,21 @@ func ExtractPath(uri url.URL) (*string, error) {
 	p := uri.String()
 
 	if strings.Contains(p, colon) {
-		p = p[strings.Index(p, schemeSeparator)+3:]
+		if strings.Contains(p, schemeSeparator) {
+			p = p[strings.Index(p, schemeSeparator)+3:]
+		}
 		if strings.Contains(p, colon) {
 			p = p[strings.LastIndex(p, colon):]
 		}
-		p = p[strings.Index(p, "/"):]
+		if strings.Contains(p, slash) {
+			p = p[strings.Index(p, slash):]
+		} else {
+			if strings.Contains(p, anchor) {
+				p = p[strings.Index(p, anchor):]
+			} else {
+				p = ""
+			}
+		}
 		p = trimQuery(p)
 		return &p, nil
 	}
@@ -62,7 +74,9 @@ func ExtractPath(uri url.URL) (*string, error) {
 		i1 := strings.Index(lp, ltld)
 		p1 := p[i1+len(ltld):]
 		p1 = trimQuery(p1)
-		p1 = p1[strings.Index(p1, "/"):]
+		if strings.Contains(p1, slash) {
+			p1 = p1[strings.Index(p1, slash):]
+		}
 		return &p1, nil
 	}
 

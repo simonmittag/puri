@@ -33,15 +33,16 @@ puri
 
 ## Usage
 ```
-λ puri[v0.1.6]
-Usage: puri [-h]|[-v][-p name]| scheme://host:port?k=v
-  -h    print usage instructions
-  -o    extract host
-  -p string
-        extract uri param
-  -r    extract port
-  -s    extract scheme
-  -v    print puri version
+λpuri[v0.1.7]
+Usage: puri [-s]|[-o]|[-r]|[-p]|[-q name]|[-h]|[-v] scheme://host:port#a?k=v
+  -h	print usage instructions
+  -o	extract host
+  -p	extract path
+  -q string
+    	extract query param
+  -r	extract port
+  -s	extract scheme
+  -v	print puri version
 ```
 
 ## Examples

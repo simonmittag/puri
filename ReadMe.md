@@ -1,6 +1,6 @@
 ![](logo.png)
 
-`puri` ("parse uri") is a robust commandline utility that reads and extracts uri components, and able to process URLs
+`puri` ("parse uri") is a robust commandline utility that reads and extracts uri components. It processes URLs
 with and without schemes.
 
 [![Circleci Builds](https://circleci.com/gh/simonmittag/puri.svg?style=shield)](https://circleci.com/gh/simonmittag/puri)

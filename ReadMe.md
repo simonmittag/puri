@@ -51,6 +51,18 @@ Usage: puri [-s]|[-o]|[-r]|[-p]|[-q name]|[-h]|[-v] scheme://host:port#a?k=v
 
 ## Examples
 
+Get URI path without scheme specified
+```
+λ puri -p bar.com/foo?k=foo
+  /foo
+```
+
+Get URI host without scheme specified
+```
+λ puri -o bar.com?k=foo
+  bar.com
+```
+
 Get URI query param
 ```
 λ puri -q k https://www.bar.com?k=foo

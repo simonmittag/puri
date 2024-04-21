@@ -49,14 +49,14 @@ Usage: puri [-s]|[-o]|[-r]|[-p]|[-q name]|[-h]|[-v] scheme://host:port#a?k=v
 
 Get URI query param
 ```
-λ puri -q q https://www.google.com?q=blah
-  blah
+λ puri -q k https://www.bar.com?k=foo
+  foo
 ```
 
 Get URI path (includes anchor)
 ```
-λ puri -p https://www.google.com/q#a
-  /q#a
+λ puri -p https://www.foo.com/q#bar?k=v
+  /q#bar
 ```
 
 

@@ -50,14 +50,14 @@ func TestExtractParam(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := ExtractParam(tt.uri, tt.param)
+			got, err := ExtractQuery(tt.uri, tt.param)
 			if err == nil {
 				if tt.want != nil && (*got != *tt.want) {
-					t.Errorf("ExtractParam() = %v, want %v", got, tt.want)
+					t.Errorf("got param: %v, want param: %v", got, tt.want)
 				}
 			} else {
 				if tt.want != nil {
-					t.Errorf("wanted a result: %s, but got error: %v", *tt.want, err)
+					t.Errorf("wanted param: %s, but got error: %v", *tt.want, err)
 				}
 			}
 		})
@@ -82,12 +82,12 @@ func TestExtractScheme(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			gotScheme, err := ExtractScheme(tc.uri)
 			if (err != nil) != tc.wantError {
-				t.Errorf("ExtractScheme() error = %v, hasError %v", err, tc.wantError)
+				t.Errorf("got error: %v, want error: %v", err, tc.wantError)
 				return
 			}
 
 			if tc.wantScheme != nil && (*gotScheme != *tc.wantScheme) {
-				t.Errorf("ExtractScheme() = %v, want %v", gotScheme, tc.wantScheme)
+				t.Errorf("got scheme: %v, want scheme: %v", gotScheme, tc.wantScheme)
 			}
 		})
 	}
@@ -111,11 +111,11 @@ func TestExtractHost(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			gotHost, err := ExtractHost(tc.uri)
 			if (err != nil) != tc.wantError {
-				t.Errorf("ExtractHost() error = %v, hasError %v", err, tc.wantError)
+				t.Errorf("got error: %v, want error: %v", err, tc.wantError)
 				return
 			}
 			if *gotHost != *tc.wantHost {
-				t.Errorf("ExtractScheme() = %v, want %v", gotHost, tc.wantHost)
+				t.Errorf("got host: %v, want host: %v", gotHost, tc.wantHost)
 			}
 		})
 	}
@@ -139,11 +139,44 @@ func TestExtractPort(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			gotPort, err := ExtractPort(tc.uri)
 			if (err != nil) != tc.wantError {
-				t.Errorf("ExtractPort() error = %v, hasError %v", err, tc.wantError)
+				t.Errorf("got error: %v, want error: %v", err, tc.wantError)
 				return
 			}
 			if tc.wantPort != nil && (*gotPort != *tc.wantPort) {
-				t.Errorf("ExtractPort() = %v, want %v", gotPort, tc.wantPort)
+				t.Errorf("got port: %v, want port: %v", gotPort, tc.wantPort)
+			}
+		})
+	}
+}
+
+func TestExtractPath(t *testing.T) {
+	tests := []struct {
+		name      string
+		uri       url.URL
+		wantPath  *string
+		wantError bool
+	}{
+		{"Path with ftp", toTestURL("ftp://example.com/path"), p("/path"), false},
+		{"Path with http and port", toTestURL("http://example.com:8080/path"), p("/path"), false},
+		{"Path with http, port and query", toTestURL("http://example.com:8080/path/blah?k=v"), p("/path/blah"), false},
+		{"Path with host", toTestURL("example.com/path"), p("/path"), false},
+		{"Path with host and query", toTestURL("example.com/path?k=v"), p("/path"), false},
+		{"Path with host and query and anchor", toTestURL("example.com/path#x?k=v"), p("/path#x"), false},
+		{"Path with host and port", toTestURL("example.com:8080/path/a"), p("/path/a"), false},
+		{"Path with host and port and query", toTestURL("example.com:8080/path/a?k=v"), p("/path/a"), false},
+		{"Path with host and port and anchor", toTestURL("example.com:8080/path/a#x?k=v"), p("/path/a#x"), false},
+		{"Path only", toTestURL("some/path"), p("some/path"), false},
+		{"Absolute Path only", toTestURL("/some/path/more"), p("/some/path/more"), false},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			gotPath, err := ExtractPath(tc.uri)
+			if (err != nil) != tc.wantError {
+				t.Errorf("got error = %v, want error %v", err, tc.wantError)
+				return
+			}
+			if tc.wantPath != nil && (*gotPath != *tc.wantPath) {
+				t.Errorf("got path: %v, want path: %v", *gotPath, *tc.wantPath)
 			}
 		})
 	}

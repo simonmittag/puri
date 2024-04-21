@@ -17,7 +17,7 @@ const (
 	Host
 	Port
 	Path
-	Param
+	Query
 	Version
 	Usage
 )
@@ -26,12 +26,14 @@ func main() {
 	mode := Usage
 	uri := ""
 
-	p := flag.String("p", "", "extract uri param")
+	s := flag.Bool("s", false, "extract scheme")
 	o := flag.Bool("o", false, "extract host")
 	r := flag.Bool("r", false, "extract port")
-	s := flag.Bool("s", false, "extract scheme")
+	p := flag.Bool("p", false, "extract path")
+	q := flag.String("q", "", "extract query param")
 	v := flag.Bool("v", false, "print puri version")
 	h := flag.Bool("h", false, "print usage instructions")
+
 	flag.Usage = printUsage
 	err := ParseFlags()
 	if err != nil || *h {
@@ -42,31 +44,34 @@ func main() {
 		if err != nil {
 			mode = Usage
 		} else {
-			if *v {
-				mode = Version
-			} else if *p != "" {
-				mode = Param
-			} else if *s {
+			if *s {
 				mode = Scheme
 			} else if *o {
 				mode = Host
 			} else if *r {
 				mode = Port
+			} else if *p {
+				mode = Path
+			} else if *q != "" {
+				mode = Query
+			} else if *v {
+				mode = Version
 			}
 		}
 	}
 
 	switch mode {
-	case Param:
-		handleOutput(puri.ExtractParam(handleInput(uri), *p))
 	case Scheme:
 		handleOutput(puri.ExtractScheme(handleInput(uri)))
-	case Port:
-		handleOutput(puri.ExtractPort(handleInput(uri)))
 	case Host:
 		handleOutput(puri.ExtractHost(handleInput(uri)))
+	case Port:
+		handleOutput(puri.ExtractPort(handleInput(uri)))
+	case Path:
+		handleOutput(puri.ExtractPath(handleInput(uri)))
+	case Query:
+		handleOutput(puri.ExtractQuery(handleInput(uri), *q))
 	case Usage:
-
 		printUsage()
 	case Version:
 

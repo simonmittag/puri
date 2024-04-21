@@ -20,7 +20,7 @@ func TestMainFuncWithVersion(t *testing.T) {
 
 func TestMainFuncWithPayloadandUriParam(t *testing.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
-	os.Args = []string{os.Args[0], "-p", "k", "https://www.google.com?k=v"}
+	os.Args = []string{os.Args[0], "-q", "k", "https://www.google.com?k=v"}
 	main()
 }
 
@@ -33,6 +33,12 @@ func TestMainFuncWithPayloadandScheme(t *testing.T) {
 func TestMainFuncWithPayloadandHost(t *testing.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	os.Args = []string{os.Args[0], "-o", "https://www.google.com?k=v"}
+	main()
+}
+
+func TestMainFuncWithPayloadandPath(t *testing.T) {
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	os.Args = []string{os.Args[0], "-p", "https://www.google.com/path/?k=v"}
 	main()
 }
 

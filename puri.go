@@ -11,9 +11,9 @@ const Version string = "v0.1.6"
 const colon = ":"
 const schemeSeparator = "://"
 
-// ExtractParam returns a pointer to a string containing the value of the specified parameter. Note,
+// ExtractQuery returns a pointer to a string containing the value of the specified parameter. Note,
 // returns empty strings if value not found so can be used for optional params
-func ExtractParam(uri url.URL, param string) (*string, error) {
+func ExtractQuery(uri url.URL, param string) (*string, error) {
 	v := uri.Query()
 	r := v.Get(param)
 	return &r, nil
@@ -40,6 +40,37 @@ func ExtractHost(uri url.URL) (*string, error) {
 
 	hp := strings.Split(uri.Host, colon)
 	return &hp[0], nil
+}
+
+func ExtractPath(uri url.URL) (*string, error) {
+	p := uri.Path
+	if len(p) == 0 || strings.Contains(uri.String(), "#") {
+		p = uri.String()
+	}
+	if strings.Contains(p, colon) && !strings.Contains(p, schemeSeparator) {
+		c := p[strings.Index(p, colon):]
+		p = c[strings.Index(c, "/"):]
+		p = trimQuery(p)
+	}
+
+	tld, err := IANA.hasTLDInString(p)
+	if err == nil {
+		lp := strings.ToLower(p)
+		ltld := strings.ToLower(*tld)
+		i1 := strings.Index(lp, ltld)
+		p1 := p[i1+len(ltld):]
+		p1 = trimQuery(p1)
+		return &p1, nil
+	}
+
+	return &p, nil
+}
+
+func trimQuery(p string) string {
+	if strings.Contains(p, "?") {
+		p = p[:strings.Index(p, "?")]
+	}
+	return p
 }
 
 // ExtractPort extracts the port from a given URL if present, otherwise returns an error.
@@ -82,4 +113,9 @@ func NoScheme() (*string, error) {
 // NoHost returns an error indicating that there is no host available.
 func NoHost() (*string, error) {
 	return nil, errors.New("no host")
+}
+
+// NoPath returns an error indicating there is path specified
+func NoPath() (*string, error) {
+	return nil, errors.New("no path")
 }

@@ -47,11 +47,18 @@ Usage: puri [-s]|[-o]|[-r]|[-p]|[-q name]|[-h]|[-v] scheme://host:port#a?k=v
 
 ## Examples
 
-Get URI parm
+Get URI query param
 ```
-λ puri -p q https://www.google.com?q=blah
+λ puri -q q https://www.google.com?q=blah
   blah
 ```
+
+Get URI path (includes anchor)
+```
+λ puri -p https://www.google.com/q#a
+  /q#a
+```
+
 
 ## Contributions
 The puri team welcomes all [contributors](https://github.com/simonmittag/puri/blob/master/CONTRIBUTING.md). Everyone interacting with the project's codebase, issue trackers, chat rooms and mailing lists
